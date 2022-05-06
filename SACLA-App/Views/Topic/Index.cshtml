@@ -1,0 +1,24 @@
+﻿@using SACLA_App.ViewModels
+@model IEnumerable<TopicViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Topic</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var topic in Model)
+        {
+            <tr>
+            <th scope="row">@topic.Name</th>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@topic.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@topic.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@topic.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
