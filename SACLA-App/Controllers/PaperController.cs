@@ -15,7 +15,7 @@ namespace SACLA_App.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        
+
 
         public PaperController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -36,48 +36,60 @@ namespace SACLA_App.Controllers
         }
 
         // GET: PaperController
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            //var papers = await _context.Papers.ToListAsync();
+            //ApplicationViewModel appViewModel = new ApplicationViewModel();
+            //appViewModel.Papers = GetPapers();
+            //appViewModel.Topics = GetTopics();
 
-            ApplicationViewModel testModel = new ApplicationViewModel();
-            testModel.Papers = GetPapers();
-            testModel.Topics = GetTopics();
+            var applicationDbContext = _context.Papers.Include(p => p.Author).Include(p => p.Topic);
 
-            return View(testModel);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         [Authorize(Roles = "Author")]
         // GET: PaperController
-        public async Task<ActionResult> Author()
+        public async Task<IActionResult> Author()
         {
             var currentUserId = _userManager.GetUserId(User);
-            var authorPapers = await _context.Papers.ToListAsync();
-            
-            return View(authorPapers.Where(p => p.AuthorId == currentUserId));
+            //var authorPapers = await _context.Papers.ToListAsync();
+
+            var applicationDbContext = _context.Papers.Include(p => p.Author).Include(p => p.Topic).Where(p => p.AuthorId == currentUserId);
+
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: PaperController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var paperToView = await _context.Papers.Include(p => p.Author).Include(p => p.Topic).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (paperToView == null)
+            {
+                return NotFound();
+            }
+
+            return View(paperToView);
         }
 
         // GET: PaperController/Create
-        public async Task<ActionResult> Create()
+        public async Task<IActionResult> Create()
         {
-            PaperModel paper = new PaperModel();
-            PaperViewModel paperViewModel = new PaperViewModel();
-            paperViewModel.Title = paper.Title;
-            paperViewModel.Author = paper.Author;
-            paperViewModel.Topics = GetTopics();
-            return View(paperViewModel);
+            //PaperViewModel paperViewModel = new PaperViewModel();
+            //paperViewModel.Topic = GetTopics();
+            ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name");
+            return View();
         }
 
         // POST: PaperController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PaperViewModel paperViewModel)
+        public async Task<IActionResult> Create(PaperViewModel paperViewModel)
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserId = _userManager.GetUserId(User);
@@ -86,62 +98,127 @@ namespace SACLA_App.Controllers
             {
                 PaperModel paper = new PaperModel()
                 {
-                    Title = paperViewModel.Title,
-                    Abstract = paperViewModel.Abstract,
-                    //Topics = (IEnumerable<TopicModel>)paperViewModel.Topics,
+                    Title = paperViewModel.Paper.Title,
+                    Abstract = paperViewModel.Paper.Abstract,
+                    TopicId = paperViewModel.Topic.Id,
                     AuthorId = currentUserId,
-                    DateSubmitted = DateTime.Today
+                    DateSubmitted = DateTime.Now
                 };
                 _context.Papers.Add(paper);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Author));
+                ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name", paperViewModel.Topic.Name);
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // GET: PaperController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var paperModel = await _context.Papers.FindAsync(id);
+
+            PaperViewModel paperViewModel = new PaperViewModel()
+            {
+                Paper = paperModel,
+                Topic = paperModel.Topic
+            };
+
+            if (paperModel == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name", paperModel.TopicId);
+            return View(paperViewModel);
         }
 
         // POST: PaperController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, PaperViewModel paperViewModel)
         {
+            if (id != paperViewModel.Paper.Id)
+            {
+                return NotFound();
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            var paperToUpdate = await _context.Papers.FirstOrDefaultAsync(p => p.Id == id);
+
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserId = _userManager.GetUserId(User);
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                paperToUpdate.Title = paperViewModel.Paper.Title;
+                paperToUpdate.Abstract = paperViewModel.Paper.Abstract;
+                paperToUpdate.TopicId = paperViewModel.Topic.Id;
+                paperToUpdate.Author = paperToUpdate.Author;
+                paperToUpdate.AuthorId = paperToUpdate.AuthorId;
+                paperToUpdate.DateSubmitted = paperToUpdate.DateSubmitted;
+
+                _context.Update(paperToUpdate);
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return View();
+                if (!PaperViewModelExists(paperViewModel.Paper.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return RedirectToAction(nameof(Author));
+            //}
+            ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name", paperViewModel.Topic.Name);
+            return View(paperViewModel);
         }
 
         // GET: PaperController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var paperToView = await _context.Papers.Include(p => p.Author).Include(p => p.Topic).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (paperToView == null)
+            {
+                return NotFound();
+            }
+
+            return View(paperToView);
         }
 
         // POST: PaperController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var paperModel = await _context.Papers.FindAsync(id);
+            _context.Papers.Remove(paperModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Author));
+        }
+
+        private bool PaperViewModelExists(int id)
+        {
+            return _context.Papers.Any(e => e.Id == id);
         }
     }
 }

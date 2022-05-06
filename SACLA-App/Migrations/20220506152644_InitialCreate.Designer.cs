@@ -12,7 +12,7 @@ using SACLA_App.Areas.Identity.Data;
 namespace SACLA_App.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220505192214_InitialCreate")]
+    [Migration("20220506152644_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -351,7 +351,7 @@ namespace SACLA_App.Migrations
                         .IsRequired();
 
                     b.HasOne("SACLA_App.Models.TopicModel", "Topic")
-                        .WithMany("Papers")
+                        .WithMany()
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -359,11 +359,6 @@ namespace SACLA_App.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Topic");
-                });
-
-            modelBuilder.Entity("SACLA_App.Models.TopicModel", b =>
-                {
-                    b.Navigation("Papers");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,6 @@ namespace SACLA_App.Models
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
-        public IEnumerable<PaperModel> Papers { get; set; }
+        //public IEnumerable<PaperModel> Papers { get; set; }
     }
 }

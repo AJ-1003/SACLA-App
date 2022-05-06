@@ -1,5 +1,11 @@
 ﻿@using SACLA_App.ViewModels
-@model ApplicationViewModel
+@using SACLA_App.Models
+@model IEnumerable<PaperModel>
+
+@{
+    ViewData["Title"] = "Your Papers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -10,24 +16,26 @@
             <th scope="col">Id</th>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
+            <th scope="col">Date Submitted</th>
             <th scope="col">Topic</th>
-            <th scope="col"></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var paper in Model.Papers)
+        @foreach (var paper in Model)
         {
             <tr>
-            <th scope="row">@paper.Id</th>
-            <th>@paper.Title</th>
-            <th>@paper.Author</th>
-            <th>@paper.Topic</th>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@paper.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@paper.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@paper.Id">Delete</a>
-            </td>
-        </tr>
+                <td>@paper.Id</td>
+                <td>@paper.Title</td>
+                <td>@paper.Author</td>
+                <td>@paper.DateSubmitted</td>
+                <td>@paper.Topic.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@paper.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@paper.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@paper.Id">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

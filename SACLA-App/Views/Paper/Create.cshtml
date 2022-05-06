@@ -4,49 +4,45 @@
 @{
     ViewData["Title"] = "Create Paper";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>Create</h1>
 
-<h4>PaperViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Abstract" class="control-label"></label>
-                <textarea asp-for="Abstract" class="form-control"></textarea>
-                <span asp-validation-for="Abstract" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Topics" class="control-label">Topic</label>
-                <select asp-for="Topics" class="form-select" aria-label="Default select example">
-                    @foreach (var topic in Model.Topics)
-                    {
-                        <option value="@topic.Name">@topic.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="Topics" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <h1>Create</h1>
+
+    <h4>PaperViewModel</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model.Paper.Title" class="control-label"></label>
+                    <input asp-for="@Model.Paper.Title" class="form-control" />
+                    <span asp-validation-for="@Model.Paper.Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Paper.Abstract" class="control-label"></label>
+                    <textarea asp-for="@Model.Paper.Abstract" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Paper.Abstract" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="@Model.Topic.Id" class="control-label">Topic</label>
+                    <select asp-for="@Model.Topic.Id" class="form-select" aria-label="Default select example" asp-items="@ViewBag.TopicId"></select>
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Author">Back to List</a>
+    </div>
 
-@section Scripts {
+    @section Scripts {
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+    }
+    }
 }

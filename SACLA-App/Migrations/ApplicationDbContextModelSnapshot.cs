@@ -349,7 +349,7 @@ namespace SACLA_App.Migrations
                         .IsRequired();
 
                     b.HasOne("SACLA_App.Models.TopicModel", "Topic")
-                        .WithMany("Papers")
+                        .WithMany()
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -357,11 +357,6 @@ namespace SACLA_App.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Topic");
-                });
-
-            modelBuilder.Entity("SACLA_App.Models.TopicModel", b =>
-                {
-                    b.Navigation("Papers");
                 });
 #pragma warning restore 612, 618
         }

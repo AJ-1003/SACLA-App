@@ -1,7 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using SACLA_App.ViewModels
+@model PaperViewModel
+
 @{
     ViewData["Title"] = "Edit Paper";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>PaperViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Paper.Id" />
+            <input type="hidden" asp-for="@Model.Paper.Author" />
+            <input type="hidden" asp-for="@Model.Paper.AuthorId" />
+            <input type="hidden" asp-for="@Model.Paper.DateSubmitted" />
+            <div class="form-group">
+                <label asp-for="@Model.Paper.Title" class="control-label"></label>
+                <input asp-for="@Model.Paper.Title" class="form-control" />
+                <span asp-validation-for="@Model.Paper.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Paper.Abstract" class="control-label"></label>
+                <textarea asp-for="@Model.Paper.Abstract" class="form-control"></textarea>
+                <span asp-validation-for="@Model.Paper.Abstract" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="@Model.Topic.Id" class="control-label">Topic</label>
+                <select asp-for="@Model.Topic.Id" class="form-select" aria-label="Default select example" asp-items="@ViewBag.TopicId"></select>
+                <span asp-validation-for="Topic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Author">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

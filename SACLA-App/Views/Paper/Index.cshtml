@@ -1,30 +1,33 @@
-﻿@using SACLA_App.ViewModels
-@model ApplicationViewModel
+﻿@using SACLA_App.Models
+@model IEnumerable<PaperModel>
 
 @{
-    ViewData["Title"] = "Topics";
+    ViewData["Title"] = "Papers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
 <table class="table">
     <thead>
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
-            <th scope="col">Topic</th>
             <th scope="col">Date Submitted</th>
+            <th scope="col">Topic</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var paper in Model.Papers)
+        @foreach (var paper in Model)
         {
             <tr>
             <td>@paper.Id</td>
             <td>@paper.Title</td>
             <td>@paper.Author</td>
             <td>@paper.DateSubmitted</td>
-            <td>@paper.Topic</td>
+            <td>@paper.Topic.Name</td>
         </tr>
         }
     </tbody>
