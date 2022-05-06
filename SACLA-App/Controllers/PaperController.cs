@@ -106,7 +106,9 @@ namespace SACLA_App.Controllers
                 };
                 _context.Papers.Add(paper);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Author));
+                TempData["Alert"] = "success";
+                TempData["Message"] = "Record successfully created!";
+                return RedirectToAction("Author", "Paper");
                 ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name", paperViewModel.Topic.Name);
             }
             catch
@@ -181,10 +183,12 @@ namespace SACLA_App.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Author));
+            TempData["Alert"] = "success";
+            TempData["Message"] = "Record successfully updated!";
+            return RedirectToAction("Author", "Paper");
             //}
             ViewData["TopicId"] = new SelectList(_context.Set<TopicModel>(), "Id", "Name", paperViewModel.Topic.Name);
-            return View(paperViewModel);
+            //return View(paperViewModel);
         }
 
         // GET: PaperController/Delete/5
@@ -213,7 +217,9 @@ namespace SACLA_App.Controllers
             var paperModel = await _context.Papers.FindAsync(id);
             _context.Papers.Remove(paperModel);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Author));
+            TempData["Alert"] = "danger";
+            TempData["Message"] = "Record successfully deleted!";
+            return RedirectToAction("Author", "Paper");
         }
 
         private bool PaperViewModelExists(int id)

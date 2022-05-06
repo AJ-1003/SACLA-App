@@ -6,45 +6,50 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>PaperModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Abstract)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Abstract)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateSubmitted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateSubmitted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Topic)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Topic.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author.UserName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Author">Back to List</a>
+<div class="row">
+    <div class="col-6 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h2>Details</h2>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4 mb-3">
+                        @Html.DisplayNameFor(model => model.Title)
+                    </dt>
+                    <dd class="col-sm-8 mb-3">
+                        @Html.DisplayFor(model => model.Title)
+                    </dd>
+                    <dt class="col-sm-4 mb-3">
+                        @Html.DisplayNameFor(model => model.Abstract)
+                    </dt>
+                    <dd class="col-sm-8 mb-3">
+                        @Html.DisplayFor(model => model.Abstract)
+                    </dd>
+                    <dt class="col-sm-4 mb-3">
+                        @Html.DisplayNameFor(model => model.DateSubmitted)
+                    </dt>
+                    <dd class="col-sm-8 mb-3">
+                        @Html.DisplayFor(model => model.DateSubmitted)
+                    </dd>
+                    <dt class="col-sm-4 mb-3">
+                        @Html.DisplayNameFor(model => model.Topic)
+                    </dt>
+                    <dd class="col-sm-8 mb-3">
+                        @Html.DisplayFor(model => model.Topic.Name)
+                    </dd>
+                    <dt class="col-sm-4 mb-3">
+                        @Html.DisplayNameFor(model => model.Author)
+                    </dt>
+                    <dd class="col-sm-8 mb-3">
+                        @Html.DisplayFor(model => model.Author.UserName)
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn btn-outline-primary mx-2 " asp-action="Author">Back to List</a>
+            </div>
+        </div>
+    </div>
 </div>

@@ -6,42 +6,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
 
-<h4>PaperViewModel</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-8 mx-auto">
+        <h2>Edit</h2>
+        <hr />
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="@Model.Paper.Id" />
             <input type="hidden" asp-for="@Model.Paper.Author" />
             <input type="hidden" asp-for="@Model.Paper.AuthorId" />
             <input type="hidden" asp-for="@Model.Paper.DateSubmitted" />
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="@Model.Paper.Title" class="control-label"></label>
                 <input asp-for="@Model.Paper.Title" class="form-control" />
                 <span asp-validation-for="@Model.Paper.Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="@Model.Paper.Abstract" class="control-label"></label>
                 <textarea asp-for="@Model.Paper.Abstract" class="form-control"></textarea>
                 <span asp-validation-for="@Model.Paper.Abstract" class="text-danger"></span>
             </div>
-            <div>
+            <div class="form-group mb-3">
                 <label asp-for="@Model.Topic.Id" class="control-label">Topic</label>
                 <select asp-for="@Model.Topic.Id" class="form-select" aria-label="Default select example" asp-items="@ViewBag.TopicId"></select>
                 <span asp-validation-for="Topic" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Edit" class="btn btn-primary" />
+                <a class="btn btn-outline-primary mx-2" asp-action="Author">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Author">Back to List</a>
 </div>
 
 @section Scripts {

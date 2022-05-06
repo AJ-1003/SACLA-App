@@ -4,7 +4,7 @@ using SACLA_App.Areas.Identity.Data;
 using SACLA_App.Core;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");;
+var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
